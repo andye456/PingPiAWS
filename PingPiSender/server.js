@@ -14,7 +14,7 @@ console.log("****** Must run as root *******");
 var express  = require('express');
 var app      = express();                               // create our app w/ express
 var bodyParser = require('body-parser');    // pull information from HTML POST (express4)
-# This is needed to do the ping monitoring
+// This is needed to do the ping monitoring
 var ping = require ("net-ping");
 var http = require('http');
 
@@ -26,14 +26,13 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json' })); // parse applica
 
 
 // load the routes
-require('./app/routes')(app);
 interval=5000; // default time period
 
-app.listen("8080");
+app.listen("8090");
 
 
 // read the data file with temp val every $timeperiod seconds
-var run = setInterval(writePingDataToFile,interval); // every 5 seconds
+var run = setInterval(sendPingData,interval); // every 5 seconds
 
 
 var ping_options = {
@@ -45,13 +44,10 @@ var ping_options = {
     ttl: 128
 };
 
-//var json_file = 'ping_data.json';
-
-
 
 var session = ping.createSession(ping_options);
 
-function writePingDataToFile() {
+function sendPingData() {
     console.log("PING!\n");
     var target = "8.8.8.8";
     
@@ -98,11 +94,6 @@ function writePingDataToFile() {
     });
 
 };
-
-
-data="1asdfasdfasdfasd00";
-
-
 
 
 

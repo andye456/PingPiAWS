@@ -1,0 +1,14 @@
+{
+  "name": "PingPiSender",
+  "version": "0.0.1",
+  "description": "RPi monitor.",
+  "main": "server.js",
+  "author": "SCL",
+  "dependencies": {
+    "body-parser": "~1.5.2",
+    "express": "~4.7.2",
+    "method-override": "~2.1.2",
+    "net-ping": "~1.1.11",
+    "raw-socket": "1.6.4"
+  }
+}

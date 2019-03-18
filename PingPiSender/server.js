@@ -26,13 +26,12 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json' })); // parse applica
 
 
 // load the routes
-interval=5000; // default time period
-
+interval=10000
 app.listen("8090");
 
 
 // read the data file with temp val every $timeperiod seconds
-var run = setInterval(sendPingData,interval); // every 5 seconds
+var run = setInterval(sendPingData,interval); // every 10 seconds
 
 
 var ping_options = {
@@ -51,17 +50,18 @@ function sendPingData() {
     console.log("PING!\n");
     var target = "8.8.8.8";
     
+    try {
     session.pingHost (target, function (error, target, sent, rcvd) {
 	var ms = rcvd - sent;
 	// TODO: Maybe only write failure to the Mongo DB to save data.
 	if(error) {
 	    if (error instanceof ping.RequestTimedOutError) {
-		    var pingobj = {'date':getDateTime(), 'outcome':'timeout', 'time':4000};	
+		    var pingobj = {'timestamp':getDateTime(), 'outcome':'timeout', 'time':4000};	
 	    } else {
-		    var pingobj = {'date':getDateTime(), 'outcome':'unreachable', 'time':0};
+		    var pingobj = {'timestamp':getDateTime(), 'outcome':'unreachable', 'time':0};
 	    }
 	} else {
-	    var pingobj = {'date':getDateTime(), 'outcome':'success', 'time':ms};	    
+	    var pingobj = {'timestamp':getDateTime(), 'outcome':'success', 'time':ms};	    
 	}
 	data = JSON.stringify(pingobj);  
 	// This is the info for the remote server	    
@@ -73,7 +73,8 @@ function sendPingData() {
 	    method: 'POST',
 	    headers: {
 	    'Content-Type': 'application/json',
-	    'Content-Length': Buffer.byteLength(data)
+	    'Content-Length': Buffer.byteLength(data),
+	    'Connection':'Keep-Alive'
 	    }
 	};
 	// Set up the HTTP request based on the above options
@@ -81,7 +82,7 @@ function sendPingData() {
 	    response.setEncoding('utf8');
 	    console.log(data);
 	    response.on('data', function (chunk) {
-		console.log("body: " + chunk);
+		process.stdout.write("body: " + chunk);
 	    });
 	    //response.on('end', function() {
 		//res.send('ok');
@@ -89,10 +90,18 @@ function sendPingData() {
 	});
 	// write the json string to the remote location.
 	httpreq.write(data);
-	httpreq.end();
+	//httpreq.end();
+	httpreq.on('error', function(e) {
+	    //console.error(e);
+	    
+	});
+	
 	
     });
-
+    }
+    catch(err) {
+	console.log("caught error: "+err.message);
+    }
 };
 
 
@@ -122,6 +131,4 @@ function getDateTime() {
     return year + "-" + month + "-" + day + "T" + hour + ":" + min + ":" + sec;
 
 }
-
-
 

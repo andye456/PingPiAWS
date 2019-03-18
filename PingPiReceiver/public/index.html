@@ -1,6 +1,33 @@
 <!doctype html>
 <html>
-	<head><title>Maintenance Page for Ping Pi</title></head>
+	<head>
+		<title>Maintenance Page for Ping Pi</title>
+		<!--script src="https://d3js.org/d3.v5.min.js"></script-->
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<script src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<link rel="stylesheet" href="main.css">
+		<style>
+			body{font-family:arial, 'Hiragino Sans GB',Tahoma, Arial, Helvetica, STHeiti;font-size: 14px;}
+			.days-hours-heatmap{padding: 20px 0 20px 0;width: 500px;margin: 0 auto;}
+			.days-hours-heatmap .calibration{margin-bottom: 15px;width:400px;}
+			.days-hours-heatmap .calibration .group{display: inline-block;}
+			.days-hours-heatmap .calibration .description{width:108px;}
+			.days-hours-heatmap .calibration .description>label:last-child{float:right;}
+			.days-hours-heatmap .calibration>.display-control{float:right;}
+			.days-hours-heatmap .calibration>.display-control label{vertical-align: top;}
+			.days-hours-heatmap .calibration>.display-control input[type='radio']{cursor: pointer;}
+
+			.days-hours-heatmap .heatmap .axis path{display: none;}
+			.days-hours-heatmap .heatmap .axis line{fill: none;stroke: #000;shape-rendering: crispEdges;}
+			.days-hours-heatmap .heatmap .axis text{font-size: 12px}
+		</style>
+	</head>
 </html>
 <body>
 	<H3>
@@ -16,8 +43,33 @@ ______ _  ______ _              ______          _
                          
 </pre>
 	</H3>
-	<form method="POST" target="/api/writeping">
-		<input type="text" name="username"/>
-		<input type="submit" name="submit"/>
-	</form>
+	   <div class="days-hours-heatmap">
+      <!-- calibration and render type controller -->
+      <div class="calibration" role="calibration">
+        <div class="group" role="example">
+          <svg width="120" height="17">
+          </svg>
+          <div role="description" class="description">
+            <label>0</label>
+            <label>4000+</label>
+          </div>        
+        </div>
+        <div role="toggleDisplay" class="display-control">
+          <div>
+            <input type="radio" name="displayType" checked/>
+            <label>count</label>
+          </div>
+          <div>
+            <input type="radio" name="displayType"/>
+            <label>daily</label> 
+          </div>
+        </div>
+      </div>
+      <div id="selectdate"></div>
+      <!-- heatmap -->
+      <svg role="heatmap" class="heatmap"></svg>
+    </div>
+
+	<script src="app.js" charset="utf-8"></script>
+	
 </body>

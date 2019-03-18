@@ -9,9 +9,11 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 		<link rel="stylesheet" href="main.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css"/>
 		<style>
 			body{font-family:arial, 'Hiragino Sans GB',Tahoma, Arial, Helvetica, STHeiti;font-size: 14px;}
 			.days-hours-heatmap{padding: 20px 0 20px 0;width: 500px;margin: 0 auto;}
@@ -54,18 +56,15 @@ ______ _  ______ _              ______          _
             <label>4000+</label>
           </div>        
         </div>
-        <div role="toggleDisplay" class="display-control">
-          <div>
-            <input type="radio" name="displayType" checked/>
-            <label>count</label>
-          </div>
-          <div>
-            <input type="radio" name="displayType"/>
-            <label>daily</label> 
-          </div>
-        </div>
+        <div class="input-group date datepicker" data-date-format="yyyy-mm-dd">
+			<input type="text" class="form-control" id="selectdate">
+			<div class="input-group-addon">
+				<span class="glyphicon glyphicon-th"></span>
+			</div>
+		</div>
       </div>
-      <div id="selectdate"></div>
+      
+      <!--div id="selectdate"></div--->
       <!-- heatmap -->
       <svg role="heatmap" class="heatmap"></svg>
     </div>

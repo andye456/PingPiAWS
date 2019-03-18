@@ -1,21 +1,11 @@
 (function(){
 	
-  // Date select
-  var maindiv = d3.select("#selectdate").append("div");
-
-  maindiv
-		.append("input")
-        .attr("type", "text")
-        .attr("id", "day")
-        .attr("placeholder", "yyyy-mm-dd")
-  ;
-
 	
   //UI configuration
   var itemSize = 10,
     cellSize = itemSize-1,
     width = 800,
-    height = itemSize*360,
+    height = itemSize*360+100,
     margin = {top:20,right:20,bottom:20,left:25};
 
   //formats
@@ -43,11 +33,11 @@
       .tickFormat(hourFormat),
     yAxisScale = d3.scale.linear()
       .range([0,axisHeight])
-      .domain([0,360]),
+      .domain([0,60]),
     yAxis = d3.svg.axis()
       .orient('left')
-      .ticks(5)
-      .tickFormat(d3.format('05d'))
+      .ticks(72)
+      .tickFormat(d3.format('02d'))
       .scale(yAxisScale);
 
   initCalibration();
@@ -61,11 +51,13 @@
     .attr('height',height-margin.top-margin.bottom)
     .attr('transform','translate('+margin.left+','+margin.top+')');
   var rect = null;
-  maindiv
-    .append("button")
-    .text("Get ping data")
-    .on("click", function () {	
-		day=d3.select("#day").node().value;
+  
+  var datepicker=$('.datepicker').datepicker();
+  
+  datepicker.on('changeDate', function(e) {
+		day=d3.select("#selectdate").node().value;
+		//day = e.date.valueOf();
+		console.log("day = "+day);
 		var start=day+'T00:00:00';
 		var end  =day+'T23:59:59';
   
@@ -85,7 +77,8 @@
 		  return d.date;
 		});
 
-
+		datepicker.hide();
+		datepicker.show();
 
 		axisWidth = itemSize*24;
 
@@ -105,8 +98,8 @@
 		  .attr('class','y axis')
 		  .call(yAxis)
 		.append('text')
-		  .text('time')
-		  .attr('transform','translate(-10,'+axisHeight+') rotate(-90)')
+		  .text('minutes')
+		  .attr('transform','translate(-20,'+axisHeight+') rotate(-90)')
 		  ;
 		
 		//render heatmap rects
@@ -162,7 +155,6 @@
   }
 
   function renderColor(){
-    var renderByCount = document.getElementsByName('displayType')[0].checked;
 
     rect
       .filter(function(d){
@@ -177,7 +169,7 @@
         //choose color dynamicly      
         var colorIndex = d3.scale.quantize()
           .range([0,1,2,3,4,5,6,7])
-          .domain((renderByCount?[0,1000]:dailyValueExtent[d.day]));
+          .domain([0,1000]);
 
         return d3.interpolate(a,colorCalibration[colorIndex(d['time'])]);
       });

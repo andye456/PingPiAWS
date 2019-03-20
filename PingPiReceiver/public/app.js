@@ -55,13 +55,15 @@
   var datepicker=$('.datepicker').datepicker();
   
   datepicker.on('changeDate', function(e) {
-		day=d3.select("#selectdate").node().value;
-		//day = e.date.valueOf();
-		console.log("day = "+day);
-		var start=day+'T00:00:00';
-		var end  =day+'T23:59:59';
+	day=d3.select("#selectdate").node().value;
+	//day = e.date.valueOf();
+	console.log("day = "+day);
+	var start=day+'T00:00:00';
+	var end  =day+'T23:59:59';
+	// Removes grid when date is changed or re-selected
+	heatmap.selectAll('rect').remove();
   
-		d3.json('http://35.176.56.125:8090/api/pingdata?start='+start+'&end='+end,function(err,data) {
+	d3.json('http://35.176.56.125:8090/api/pingdata?start='+start+'&end='+end,function(err,data) {
 
 		data.forEach(function(valueObj){
 		  valueObj['date'] = timeFormat.parse(valueObj['timestamp']);
@@ -77,8 +79,6 @@
 		  return d.date;
 		});
 
-		datepicker.hide();
-		datepicker.show();
 
 		axisWidth = itemSize*24;
 
@@ -122,7 +122,12 @@
 			totalSeconds=parseInt(secondsPastHour)+parseInt(seconds);
 			return Math.floor(totalSeconds/10)*itemSize;
 		  })
-		  .attr('fill','#55ff55');
+		  .attr('fill','#55ff55')
+		  .on('click', function(d) {
+			$('#dialog').dialog('open');
+			$('#dialog').text(d.date+" "+d.time);
+		  })
+		  ;
 
 		rect.filter(function(d){ return d['time']>0;})
 		  .append('title')
@@ -131,8 +136,8 @@
 		  });
 
 		renderColor();
-		});
 	});
+  });
 
   function initCalibration(){
 	 

@@ -63,12 +63,22 @@ ______ _  ______ _              ______          _
 			</div>
 		</div>
       </div>
-      
+      <div id="dialog" title="Additional Info"></div>
       <!--div id="selectdate"></div--->
       <!-- heatmap -->
       <svg role="heatmap" class="heatmap"></svg>
     </div>
+	<script>
+		$(document).ready(function() {
 
+			$("#dialog").dialog({ 
+				autoOpen: false,
+				width: 100,
+				height: 50
+			});
+
+	});
+	</script>
 	<script src="app.js" charset="utf-8"></script>
 	
 </body>
